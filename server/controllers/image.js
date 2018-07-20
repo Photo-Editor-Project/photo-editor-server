@@ -24,6 +24,28 @@ const addImage = (req, res, next) => {
   }
 }
 
+const addImageFromURL = (req, res, next) => {
+  try {
+    const token = req.headers.token
+    let decoded = jwt.verify(token, process.env.JWT_KEY)
+    Image.create({
+      user: decoded.id,
+      url: req.body.url
+    }, (err, result) => {
+      if (err) {
+        res.status(500)
+        res.json({ error: 'error save image url to database' })
+      } else {
+        res.status(200)
+        res.json({ message: "photo successfully saved to database", data: result })
+      }
+    })
+  } catch (err) {
+    res.status(400)
+      .json({ message: "token invalid" })
+  }
+}
+
 const getImage = (req, res, next) => {
   try {
     const token = req.headers.token
@@ -32,8 +54,6 @@ const getImage = (req, res, next) => {
       user: decoded.id
     }
     Image.find(query)
-      .populate('user')
-      .exec()
       .then(img => {
         res.status(200)
         res.json({ message: "successfully get photos", data: img })
@@ -50,5 +70,6 @@ const getImage = (req, res, next) => {
 
 module.exports = {
   addImage,
-  getImage
+  getImage,
+  addImageFromURL
 }
