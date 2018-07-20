@@ -4,10 +4,10 @@ const Schema = mongoose.Schema
 const imageSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'users'
   },
   url: String
-  }, {
+}, {
   timestamps: true
 })
 

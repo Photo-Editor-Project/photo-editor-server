@@ -1,18 +1,16 @@
 'use strict'
 require('dotenv').config()
 
-// Imports the Google Cloud client library
+
 const Storage = require('@google-cloud/storage');
 const cloudBucket = process.env.CLOUD_BUCKET
 
-// Your Google Cloud Platform project ID
-// Creates a client
+
 const storage = new Storage({
   projectId: process.env.GCLOUD_PROJECT,
   keyFilename: process.env.KEYFILE_PATH
 });
 
-// The name for the new bucket
 const bucketName = storage.bucket(cloudBucket);
 
 const getPublicUrl = (filename) => {
@@ -21,9 +19,9 @@ const getPublicUrl = (filename) => {
 
 const sendUploadToGCS = (req, res, next) => {
   if (!req.file) {
-    return next('file gagal upload')
+    return next('failed upload file')
   }
-  //naming file
+
   const gcsname = Date.now() + req.file.originalname
   const file = bucketName.file(gcsname)
 
