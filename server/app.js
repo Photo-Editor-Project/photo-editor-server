@@ -1,8 +1,6 @@
-
-
 require('dotenv').config()
 var cors = require('cors')
- 
+
 //===================== mongoose =========
 
 
@@ -12,10 +10,10 @@ const mongoose = require("mongoose");
 const mongoUser = process.env.MONGO_USER
 const mongoPass = process.env.MONGO_PASS
 
-mongoose.connect(`mongodb://${mongoUser}:${mongoPass}@ds247698.mlab.com:47698/photo-editor`,{ useNewUrlParser: true })
+mongoose.connect(`mongodb://${mongoUser}:${mongoPass}@ds247698.mlab.com:47698/photo-editor`, { useNewUrlParser: true })
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function () {
+db.once('open', function() {
   console.log('connected to db')
 });
 
@@ -30,7 +28,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-
+var imagesRouter = require('./routes/images');
 var app = express();
 
 // view engine setup
@@ -46,6 +44,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/images', imagesRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
